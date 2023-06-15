@@ -16,6 +16,8 @@ from logging import getLogger
 import torch
 import torchvision
 
+from torch.utils.data import DataLoader
+
 _GLOBAL_SEED = 0
 logger = getLogger()
 
