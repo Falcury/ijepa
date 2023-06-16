@@ -3,6 +3,7 @@ from logging import getLogger
 
 import torch
 import torchvision
+from PIL import Image
 
 from torch.utils.data import Dataset
 import h5py
@@ -34,7 +35,7 @@ class KidneyDataset(Dataset):
             # case, patch_id = self.image_dataset[idx].split('_')
             f = h5py.File(case, "r")
             img = f['imgs'][int(patch_id)]
-            # img = Image.fromarray(img)
+            img = Image.fromarray(img)
             # img = torch.from_numpy(img)
 
             img = self.transform(img)

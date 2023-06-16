@@ -72,6 +72,7 @@ def main(args, resume_preempt=False):
     # ----------------------------------------------------------------------- #
 
     # -- META
+    is_bfloat16_supported = args['meta']['is_bfloat16_supported']
     use_bfloat16 = args['meta']['use_bfloat16']
     model_name = args['meta']['model_name']
     load_model = args['meta']['load_checkpoint'] or resume_preempt
@@ -315,7 +316,8 @@ def main(args, resume_preempt=False):
                     return loss
 
                 # Step 1. Forward
-                with torch.cuda.amp.autocast(dtype=torch.bfloat16, enabled=use_bfloat16):
+                amp_dtype = torch.bfloat16 if is_bfloat16_supported else torch.float16
+                with torch.cuda.amp.autocast(dtype=amp_dtype, enabled=use_bfloat16):
                     h = forward_target()
                     z = forward_context()
                     loss = loss_fn(z, h)
