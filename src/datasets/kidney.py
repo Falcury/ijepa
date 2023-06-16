@@ -39,7 +39,7 @@ class KidneyDataset(Dataset):
             # img = torch.from_numpy(img)
 
             img = self.transform(img)
-            return img
+            return (img,)
             # img = torch.from_numpy(img).unsqueeze(0)
             # coords = f['coords'][int(patch_id)]
             # if is_success:
