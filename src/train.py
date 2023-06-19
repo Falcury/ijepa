@@ -53,7 +53,7 @@ from src.transforms import make_transforms
 # --
 log_timings = True
 log_freq = 10
-checkpoint_freq = 50
+checkpoint_freq = 1
 # --
 
 _GLOBAL_SEED = 0
