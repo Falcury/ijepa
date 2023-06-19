@@ -145,8 +145,8 @@ def main(args, resume_preempt=False):
 
     # -- log/checkpointing paths
     log_file = os.path.join(folder, f'{tag}_r{rank}.csv')
-    save_path = os.path.join(folder, f'{tag}' + '-ep{epoch}.pth.tar')
-    latest_path = os.path.join(folder, f'{tag}-latest.pth.tar')
+    save_path = os.path.join(folder, f'{tag}' + '-ep{epoch}.pt')
+    latest_path = os.path.join(folder, f'{tag}-latest.pt')
     load_path = None
     if load_model:
         load_path = os.path.join(folder, r_file) if r_file is not None else latest_path
