@@ -10,6 +10,8 @@ data:
   pin_mem: true
 #  root_path: /run/media/pieter/T7-Pieter/ssl/PATCHES/
   root_path: /gpfs/work1/0/einf2634/h5_patches_0.5mmp_256x256/TRAIN/
+  init_from_csv: true
+  csv_path: /gpfs/work1/0/einf2634/pvalkema/ijepa/kidney_train.csv
   use_color_distortion: true
   use_gaussian_blur: false
   use_horizontal_flip: false
@@ -45,7 +47,7 @@ optimization:
   ema:
   - 0.996
   - 1.0
-  epochs: 300
+  epochs: 17
   final_lr: 1.0e-06
   final_weight_decay: 0.4
   ipe_scale: 1.0

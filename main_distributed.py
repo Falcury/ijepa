@@ -43,6 +43,14 @@ parser.add_argument(
 parser.add_argument(
     '--time', type=int, default=4300,
     help='time in minutes to run job')
+parser.add_argument(
+    '--mail-user', type=str,
+    help='email user about job state changes (as specified by --mail-type)'
+)
+parser.add_argument(
+    '--mail-type', type=str, default='ALL',
+    help='select job event types for email notification'
+)
 
 
 class Trainer:
@@ -78,12 +86,15 @@ def launch():
         slurm_max_num_timeout=20)
     executor.update_parameters(
         slurm_partition=args.partition,
-        slurm_mem_per_gpu='55G',
+        slurm_mem_per_gpu='120G',
         timeout_min=args.time,
         nodes=args.nodes,
         tasks_per_node=args.tasks_per_node,
-        cpus_per_task=10,
-        gpus_per_node=args.tasks_per_node)
+        cpus_per_task=18,
+        gpus_per_node=args.tasks_per_node,
+        mail_user=args.mail_user,
+        mail_type=args.mail_type,
+    )
 
     config_fnames = [args.fname]
 
