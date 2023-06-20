@@ -12,13 +12,16 @@ import h5py
 logger = getLogger()
 
 class KidneyDataset(Dataset):
-    def __init__(self, data_path, transform=None, training=True):
+    def __init__(self, data_path, transform=None, training=True, init_from_csv=None):
         self.transform = transform
         self.training = True # TODO(pvalkema): load validation data if False?
         self.is_initialized = False
         self.image_dataset = []
         self.filenames = []
-        self._load_h5(data_path)
+        if init_from_csv is None:
+            self._load_h5(data_path)
+        else:
+            self._load_csv(init_from_csv)
         self.data_length = len(self.image_dataset)
         self.data_path = data_path
 
@@ -67,6 +70,19 @@ class KidneyDataset(Dataset):
                         f"Couldn't load: {every_file}. Exception: \n{e}"
                     )
         self.is_initialized = True
+
+    def _load_csv(self, csv_path):
+        with open(csv_path, "r") as csv:
+            for line in csv:
+                line = line.rstrip()
+                cols = line.split(",")
+                filename = cols[0]
+                num_imgs = int(cols[1])
+                self.filenames.append(filename)
+                for i in range(num_imgs):
+                    self.image_dataset.append(filename + "_%d" % (i))
+        self.is_initialized = True
+
 
 def make_kidney_dataset(
     transform,

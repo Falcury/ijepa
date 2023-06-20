@@ -7,28 +7,47 @@ parser = argparse.ArgumentParser()
 parser.add_argument(
     '--data-path', type=str,
     help='directory containing h5 files')
+parser.add_argument(
+    '--test-integrity', action='store_true',
+    help='test h5 file integrity by reading the first and last image'
+)
+parser.add_argument(
+    '--create-csv', type=str,
+    help='create csv file with h5 filenames and number of images per file'
+)
+parser.add_argument(
+    '--init-from-csv', type=str,
+    help='initialize dataset from csv file'
+)
 
-def main(root_path):
+def main(args):
     dataset = KidneyDataset(
-        data_path=root_path,
+        data_path=args.data_path,
+        init_from_csv=args.init_from_csv,
     )
     print(f"Number of h5 files: {len(dataset.filenames)}")
     print(f"Number of images: {len(dataset)}")
 
-    img = None
-    print("Testing h5 file integrity...")
-    for filename in tqdm.tqdm(dataset.filenames):
-        f = h5py.File(filename, "r")
-        num_imgs = len(f["imgs"])
-        first_img = f["imgs"][0]
-        last_img = f["imgs"][num_imgs-1]
-        del first_img
-        del last_img
-        f.close()
-        pass
+    if args.test_integrity:
+        print("Testing h5 file integrity...")
+        for filename in tqdm.tqdm(dataset.filenames):
+            f = h5py.File(filename, "r")
+            num_imgs = len(f["imgs"])
+            first_img = f["imgs"][0]
+            last_img = f["imgs"][num_imgs-1]
+            del first_img
+            del last_img
+            f.close()
+
+    if args.create_csv:
+        print("Creating csv file...")
+        with open(args.create_csv, 'w') as csv:
+            for filename in tqdm.tqdm(dataset.filenames):
+                f = h5py.File(filename, "r")
+                num_imgs = len(f["imgs"])
+                print(f"{filename},{num_imgs}", file=csv)
+                f.close()
 
 if __name__=="__main__":
-    # dataset_path = "/gpfs/work1/0/einf2634/h5_patches_0.5mmp_256x256/TRAIN/"
-    # dataset_path = "/run/media/pieter/T7-Pieter/ssl/PATCHES/"
     args = parser.parse_args()
-    main(args.data_path)
+    main(args)
