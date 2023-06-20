@@ -54,6 +54,7 @@ from src.transforms import make_transforms
 log_timings = True
 log_freq = 10
 checkpoint_freq = 1
+empty_cache_freq = 50
 # --
 
 _GLOBAL_SEED = 0
@@ -82,9 +83,11 @@ def main(args, resume_preempt=False):
     pred_emb_dim = args['meta']['pred_emb_dim']
     if not torch.cuda.is_available():
         device = torch.device('cpu')
+        need_cuda_empty_cache = False
     else:
         device = torch.device('cuda:0')
         torch.cuda.set_device(device)
+        need_cuda_empty_cache = True
 
     # -- DATA
     use_gaussian_blur = args['data']['use_gaussian_blur']
@@ -373,6 +376,9 @@ def main(args, resume_preempt=False):
             log_stats()
 
             assert not np.isnan(loss), 'loss is nan'
+
+            if need_cuda_empty_cache and itr % empty_cache_freq == 0:
+                torch.cuda.empty_cache()
 
         # -- Save Checkpoint after every epoch
         logger.info('avg. loss %.3f' % loss_meter.avg)
