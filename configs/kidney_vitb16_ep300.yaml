@@ -14,8 +14,8 @@ data:
   use_gaussian_blur: false
   use_horizontal_flip: false
 logging:
-#  folder: /run/media/pieter/HugeTwo/projects/ssl/ijepa/result/kidney_vitl16_ep300
-  folder: /gpfs/work1/0/einf2634/results/ijepa/kidney_vitl16
+#  folder: /run/media/pieter/HugeTwo/projects/ssl/ijepa/result/kidney_vitb16
+  folder: /gpfs/work1/0/einf2634/results/ijepa/kidney_vitb16
   write_tag: jepa
 mask:
   allow_overlap: false

@@ -3,6 +3,7 @@ from logging import getLogger
 
 import torch
 import torchvision
+import tqdm
 from PIL import Image
 
 from torch.utils.data import Dataset
@@ -16,6 +17,7 @@ class KidneyDataset(Dataset):
         self.training = True # TODO(pvalkema): load validation data if False?
         self.is_initialized = False
         self.image_dataset = []
+        self.filenames = []
         self._load_h5(data_path)
         self.data_length = len(self.image_dataset)
         self.data_path = data_path
@@ -52,10 +54,12 @@ class KidneyDataset(Dataset):
 
     def _load_h5(self, data_path):
         for root, dirs, files in os.walk(data_path):
-            for every_file in files:
+            for every_file in tqdm.tqdm(files):
                 try:
-                    f = h5py.File(os.path.join(root, every_file), "r")
+                    full_filename = os.path.join(root, every_file)
+                    f = h5py.File(full_filename, "r")
                     # file_name, file_type = os.path.splitext(every_file)
+                    self.filenames.append(full_filename)
                     for i in range(len(f['imgs'])):
                         self.image_dataset.append(os.path.join(root, every_file + "_%d" % (i)))
                 except Exception as e:

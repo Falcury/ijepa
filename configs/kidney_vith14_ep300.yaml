@@ -1,19 +1,21 @@
 data:
-  batch_size: 12
+  batch_size: 64
   color_jitter_strength: 0.25
   crop_scale:
   - 0.5
   - 1.0
   crop_size: 224
   image_folder: .
-  num_workers: 10
+  num_workers: 16
   pin_mem: true
-  root_path: /exports/path-nefro-hpc/PATCHES_LANCET/copy_TRAIN
-  use_color_distortion: false
+#  root_path: /run/media/pieter/T7-Pieter/ssl/PATCHES/
+  root_path: /gpfs/work1/0/einf2634/h5_patches_0.5mmp_256x256/TRAIN/
+  use_color_distortion: true
   use_gaussian_blur: false
   use_horizontal_flip: false
 logging:
-  folder: /exports/path-nefro-hpc/pavalkema/result/ijepa/vith14.224-bs.2048-ep.300/
+#  folder: /run/media/pieter/HugeTwo/projects/ssl/ijepa/result/kidney_vith14_ep300
+  folder: /gpfs/work1/0/einf2634/results/ijepa/kidney_vith14_ep300
   write_tag: jepa
 mask:
   allow_overlap: false
@@ -37,8 +39,8 @@ meta:
   pred_depth: 12
   pred_emb_dim: 384
   read_checkpoint: null
-  is_bfloat16_supported: false #NOTE: for A100, change to true
-  use_bfloat16: false
+  is_bfloat16_supported: true #NOTE: for A100, change to true
+  use_bfloat16: true
 optimization:
   ema:
   - 0.996
@@ -48,6 +50,6 @@ optimization:
   final_weight_decay: 0.4
   ipe_scale: 1.0
   lr: 0.001
-  start_lr: 0.0002
-  warmup: 40
+  start_lr: 0.0001
+  warmup: 15
   weight_decay: 0.04
