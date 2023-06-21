@@ -45,12 +45,13 @@ parser.add_argument(
     help='time in minutes to run job')
 parser.add_argument(
     '--mail-user', type=str,
-    help='email user about job state changes (as specified by --mail-type)'
-)
+    help='email user about job state changes (as specified by --mail-type)')
 parser.add_argument(
     '--mail-type', type=str, default='ALL',
-    help='select job event types for email notification'
-)
+    help='select job event types for email notification')
+parser.add_argument(
+    '--apply-snellius-nccl-fix', action='store_true',
+    help='sets NCCL_SOCKET_IFNAME=eno1np0 as a workaround for hang during multi-GPU init')
 
 
 class Trainer:
@@ -99,6 +100,14 @@ def launch():
             slurm_additional_parameters={
                 'mail-user': args.mail_user,
                 'mail-type': args.mail_type}
+        )
+
+    # NOTE(pvalkema) Workaround for known issue on Snellius:
+    # https://servicedesk.surf.nl/wiki/display/WIKI/Snellius+known+issues
+    if args.apply_snellius_nccl_fix:
+        print("applying NCCL fix for Snellius: export NCCL_SOCKET_IFNAME=eno1np0")
+        executor.update_parameters(
+            slurm_setup=["""export NCCL_SOCKET_IFNAME=eno1np0""",]
         )
 
     config_fnames = [args.fname]
