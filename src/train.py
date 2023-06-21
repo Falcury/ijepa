@@ -99,6 +99,11 @@ def main(args, resume_preempt=False):
     pin_mem = args['data']['pin_mem']
     num_workers = args['data']['num_workers']
     root_path = args['data']['root_path']
+    init_from_csv = args['data']['init_from_csv']
+    if init_from_csv:
+        csv_path = args['data']['csv_path']
+    else:
+        csv_path = None
     image_folder = args['data']['image_folder']
     crop_size = args['data']['crop_size']
     crop_scale = args['data']['crop_scale']
@@ -207,7 +212,9 @@ def main(args, resume_preempt=False):
             root_path=root_path,
             image_folder=image_folder,
             copy_data=copy_data,
-            drop_last=True)
+            drop_last=True,
+            csv_path=csv_path,
+    )
     ipe = len(unsupervised_loader)
 
     # -- init optimizer and scheduler

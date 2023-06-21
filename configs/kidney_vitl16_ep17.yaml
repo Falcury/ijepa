@@ -1,5 +1,5 @@
 data:
-  batch_size: 64
+  batch_size: 128
   color_jitter_strength: 0.25
   crop_scale:
   - 0.5
@@ -16,8 +16,8 @@ data:
   use_gaussian_blur: false
   use_horizontal_flip: false
 logging:
-#  folder: /run/media/pieter/HugeTwo/projects/ssl/ijepa/result/kidney_vith14_ep300
-  folder: /gpfs/work1/0/einf2634/results/ijepa/kidney_vith14
+#  folder: /run/media/pieter/HugeTwo/projects/ssl/ijepa/result/kidney_vitl16_ep300
+  folder: /gpfs/work1/0/einf2634/results/ijepa/kidney_vitl16
   write_tag: jepa
 mask:
   allow_overlap: false
@@ -30,28 +30,28 @@ mask:
   min_keep: 10
   num_enc_masks: 1
   num_pred_masks: 4
-  patch_size: 14
+  patch_size: 16
   pred_mask_scale:
   - 0.15
   - 0.2
 meta:
   copy_data: false
-  load_checkpoint: false
-  model_name: vit_huge
+  load_checkpoint: true
+  model_name: vit_large
   pred_depth: 12
   pred_emb_dim: 384
   read_checkpoint: null
-  is_bfloat16_supported: true #NOTE: for A100, change to true
+  is_bfloat16_supported: true # NOTE(pvalkema): for A100, set to true
   use_bfloat16: true
 optimization:
   ema:
   - 0.996
   - 1.0
-  epochs: 300
+  epochs: 17
   final_lr: 1.0e-06
   final_weight_decay: 0.4
   ipe_scale: 1.0
   lr: 0.001
   start_lr: 0.0001
-  warmup: 15
+  warmup: 1
   weight_decay: 0.04

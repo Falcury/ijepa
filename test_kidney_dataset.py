@@ -23,7 +23,7 @@ parser.add_argument(
 def main(args):
     dataset = KidneyDataset(
         data_path=args.data_path,
-        init_from_csv=args.init_from_csv,
+        csv_path=args.init_from_csv,
     )
     print(f"Number of h5 files: {len(dataset.filenames)}")
     print(f"Number of images: {len(dataset)}")
