@@ -21,6 +21,7 @@ import copy
 import logging
 import sys
 import yaml
+import tqdm
 
 import numpy as np
 
@@ -54,7 +55,7 @@ from src.transforms import make_transforms
 log_timings = True
 log_freq = 10
 checkpoint_freq = 1
-empty_cache_freq = 50
+empty_cache_freq = 10
 # --
 
 _GLOBAL_SEED = 0
@@ -288,7 +289,7 @@ def main(args, resume_preempt=False):
         maskB_meter = AverageMeter()
         time_meter = AverageMeter()
 
-        for itr, (udata, masks_enc, masks_pred) in enumerate(unsupervised_loader):
+        for itr, (udata, masks_enc, masks_pred) in enumerate(tqdm.tqdm(unsupervised_loader)):
 
             def load_imgs():
                 # -- unsupervised imgs
