@@ -92,9 +92,14 @@ def launch():
         tasks_per_node=args.tasks_per_node,
         cpus_per_task=18,
         gpus_per_node=args.tasks_per_node,
-        #mail_user=args.mail_user, TODO(pvalkema): can we subclass AutoExecutor to make it accept these?
-        #mail_type=args.mail_type,
     )
+
+    if args.mail_user and args.mail_type:
+        executor.update_parameters(
+            slurm_additional_parameters={
+                'mail-user': args.mail_user,
+                'mail-type': args.mail_type}
+        )
 
     config_fnames = [args.fname]
 
