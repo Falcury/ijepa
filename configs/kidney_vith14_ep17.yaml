@@ -6,7 +6,7 @@ data:
   - 1.0
   crop_size: 224
   image_folder: .
-  num_workers: 16
+  num_workers: 10
   pin_mem: true
 #  root_path: /run/media/pieter/T7-Pieter/ssl/PATCHES/
   root_path: /gpfs/work1/0/einf2634/h5_patches_0.5mmp_256x256/TRAIN/

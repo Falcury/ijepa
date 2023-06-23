@@ -30,14 +30,12 @@ def main(args):
 
     if args.test_integrity:
         print("Testing h5 file integrity...")
-        for filename in tqdm.tqdm(dataset.filenames):
-            f = h5py.File(filename, "r")
-            num_imgs = len(f["imgs"])
-            first_img = f["imgs"][0]
-            last_img = f["imgs"][num_imgs-1]
+        for ds in tqdm.tqdm(dataset.h5_dsets):
+            num_imgs = len(ds)
+            first_img = ds[0]
+            last_img = ds[num_imgs-1]
             del first_img
             del last_img
-            f.close()
 
     if args.create_csv:
         print("Creating csv file...")

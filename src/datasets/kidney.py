@@ -17,6 +17,7 @@ class KidneyDataset(Dataset):
         self.training = True # TODO(pvalkema): load validation data if False?
         self.is_initialized = False
         self.image_dataset = []
+        self.h5_dsets = []
         self.filenames = []
         if csv_path is None:
             self._load_h5(data_path)
@@ -34,12 +35,11 @@ class KidneyDataset(Dataset):
             self._load_h5(self.data_path)
             self.is_initialized = True
         try:
-            filename, extension = os.path.splitext(self.image_dataset[idx])
-            case = filename + ".h5"
-            patch_id = extension.split("_")[1]
-            # case, patch_id = self.image_dataset[idx].split('_')
-            f = h5py.File(case, "r")
-            img = f['imgs'][int(patch_id)]
+            filename, patch_id, ds = self.image_dataset[idx]
+            if ds is None:
+                f = h5py.File(filename, "r")
+                ds = f['imgs']
+            img = ds[int(patch_id)]
             img = Image.fromarray(img)
             # img = torch.from_numpy(img)
 
@@ -61,10 +61,11 @@ class KidneyDataset(Dataset):
                 try:
                     full_filename = os.path.join(root, every_file)
                     f = h5py.File(full_filename, "r")
-                    # file_name, file_type = os.path.splitext(every_file)
+                    ds = f['imgs']
                     self.filenames.append(full_filename)
+                    self.h5_dsets.append(ds)
                     for i in range(len(f['imgs'])):
-                        self.image_dataset.append(os.path.join(root, every_file + "_%d" % (i)))
+                        self.image_dataset.append((full_filename, i, ds))
                 except Exception as e:
                     logger.warning(
                         f"Couldn't load: {every_file}. Exception: \n{e}"
@@ -79,8 +80,9 @@ class KidneyDataset(Dataset):
                 filename = cols[0]
                 num_imgs = int(cols[1])
                 self.filenames.append(filename)
+                self.h5_dsets.append(None)
                 for i in range(num_imgs):
-                    self.image_dataset.append(filename + "_%d" % (i))
+                    self.image_dataset.append((filename, i, None))
         self.is_initialized = True
 
 
