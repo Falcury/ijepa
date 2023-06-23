@@ -30,7 +30,10 @@ def main(args):
 
     if args.test_integrity:
         print("Testing h5 file integrity...")
-        for ds in tqdm.tqdm(dataset.h5_dsets):
+        for i, ds in enumerate(tqdm.tqdm(dataset.h5_dsets)):
+            if ds is None:
+                f = h5py.File(dataset.filenames[i], "r")
+                ds = f['imgs']
             num_imgs = len(ds)
             first_img = ds[0]
             last_img = ds[num_imgs-1]
