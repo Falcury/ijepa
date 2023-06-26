@@ -7,7 +7,7 @@ import tqdm
 from PIL import Image
 
 from torch.utils.data import Dataset
-import h5py
+import h5pickle as h5py
 
 logger = getLogger()
 
@@ -60,7 +60,7 @@ class KidneyDataset(Dataset):
             for every_file in tqdm.tqdm(files):
                 try:
                     full_filename = os.path.join(root, every_file)
-                    f = h5py.File(full_filename, "r")
+                    f = h5py.File(full_filename, "r", skip_cache=True)
                     ds = f['imgs']
                     self.filenames.append(full_filename)
                     self.h5_dsets.append(ds)
